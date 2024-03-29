@@ -1,0 +1,9 @@
+version: '3.8' # Docker compose version
+services:
+  # =============== Our Nestjs app ===============
+  app:
+    build:
+      # Build Dockerfile
+      context: ../
+      dockerfile: ./docker/Dockerfile
+      target: production

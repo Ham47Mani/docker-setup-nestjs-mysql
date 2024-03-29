@@ -1,0 +1,39 @@
+version: '3.8' # Docker compose version
+services:
+  # =============== Our Nestjs app ===============
+  app:
+    container_name: nest-mysql
+    ports:
+      # Port
+      - "3000:3000"
+    environment:
+      # Environment Variables
+      - DATABASE_HOST=mysql_db
+      - DATABASE_PORT=3306
+      - DATABASE_USER=root
+      - DATABASE_PASSWORD=root
+      - DATABASE_NAME=nest_mysql
+    depends_on:
+      # Wait until depending app running
+      - mysql_db
+    volumes:
+      - ../src:/usr/src/app/src:ro # Using Hot-Reload
+      # Ensures that the node_modules directory is kept intact inside the container.
+      - /usr/src/app/node_modules
+
+  # =============== MySQL Database ===============
+  mysql_db:
+    image: mysql
+    restart: always
+    ports:
+      - "127.0.0.1:3307:3306"
+      - "3306:3306"
+    environment:
+      - MYSQL_DATABASE=nest_mysql
+      - MYSQL_ROOT_PASSWORD=root
+    volumes:
+      - mysqldb-data:/var/lib/mysql
+
+# Create volumes
+volumes:
+  mysqldb-data:
